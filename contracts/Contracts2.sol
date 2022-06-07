@@ -2,8 +2,16 @@
 pragma solidity ^0.7.5;
 
 contract Sidekick {
-    function sendAlert(address hero, uint enemies, bool armed) external {
-        // TODO: alert the hero! 
+    function sendAlert(
+        address hero,
+        uint256 enemies,
+        bool armed
+    ) external {
+        //alert the hero!
+        (bool success, ) = hero.call(
+            abi.encodeWithSignature("alert(uint256,bool)", enemies, armed)
+        );
+        require(success, "Not successfully called");
     }
 }
 
@@ -12,11 +20,11 @@ contract Hero {
 
     struct Ambush {
         bool alerted;
-        uint enemies;
+        uint256 enemies;
         bool armed;
     }
 
-    function alert(uint enemies, bool armed) external {
+    function alert(uint256 enemies, bool armed) external {
         ambush = Ambush(true, enemies, armed);
     }
 }
