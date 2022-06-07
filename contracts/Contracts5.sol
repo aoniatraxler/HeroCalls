@@ -10,9 +10,9 @@ contract Storage {
 contract Hero is Storage {
     constructor(address _behavior, address _friend) {
         behavior = _behavior;
-        (bool success, ) = behavior.delegatecall(abi.encodeWithSignature(
-            "setFriend(address)", _friend
-        ));
+        (bool success, ) = behavior.delegatecall(
+            abi.encodeWithSignature("setFriend(address)", _friend)
+        );
         require(success);
     }
 
@@ -26,7 +26,7 @@ contract Hero is Storage {
 contract Behavior is Storage {
     // This function has a vulnerability:
     // Anyone can call setFriend on the behavior directly
-    // With this vulnerability, kind of damage can be done? 
+    // With this vulnerability, kind of damage can be done?
     function setFriend(address _friend) external {
         friend = _friend;
     }
@@ -46,11 +46,12 @@ contract GoodFriend {
     }
 }
 
-// the Hero would never call this contract 
-// but are we safe from the bad friend? 
+// the Hero would never call this contract
+// but are we safe from the bad friend?
 contract BadFriend {
     function sayHello() external {
         // TODO: if the behavior contract called this contract directly
         // what could stop the Hero from saying Hello to the Good Friend?
+        selfdestruct(msg.sender);
     }
 }
