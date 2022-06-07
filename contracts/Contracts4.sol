@@ -39,7 +39,7 @@ contract Behavior is Storage {
     // this function is called on contract deployment to set the owner
     function initialize(address _owner) external {
         //can only be initialised once...
-        require(owner == address(0), "not with us villain");
+        require(owner == address(0), "can only initialise once");
         owner = _owner;
     }
 
