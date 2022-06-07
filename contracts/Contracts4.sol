@@ -1,5 +1,6 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.7.5;
+import "hardhat/console.sol";
 
 contract Storage {
     address public owner;
@@ -12,15 +13,15 @@ contract Hero is Storage {
     // on deployment, store the behavior address and initialize the owner
     constructor(address _owner, address _behavior) {
         behavior = _behavior;
-        (bool success, ) = behavior.delegatecall(abi.encodeWithSignature(
-            "initialize(address)", _owner
-        ));
+        (bool success, ) = behavior.delegatecall(
+            abi.encodeWithSignature("initialize(address)", _owner)
+        );
 
         require(success);
     }
 
     fallback() external {
-        if(msg.data.length > 0) {
+        if (msg.data.length > 0) {
             // proxy to behavior methods
             (bool success, ) = behavior.delegatecall(msg.data);
             require(success);
@@ -37,6 +38,8 @@ contract Hero is Storage {
 contract Behavior is Storage {
     // this function is called on contract deployment to set the owner
     function initialize(address _owner) external {
+        //can only be initialised once...
+        require(owner == address(0), "not with us villain");
         owner = _owner;
     }
 

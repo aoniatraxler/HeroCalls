@@ -1,5 +1,7 @@
 const { assert } = require("chai");
 const { ethers } = require("hardhat");
+// import "hardhat/console.sol";
+
 
 describe("Contracts4", () => {
     let behavior, heroContract, heroEOA, villianEOA;
@@ -25,7 +27,7 @@ describe("Contracts4", () => {
         });
 
         it("should supercharge the hero", async () => {
-            const isSuperCharged = await heroContract.isSuperCharged(); 
+            const isSuperCharged = await heroContract.isSuperCharged();
             assert.equal(isSuperCharged, true);
         });
 
@@ -40,13 +42,16 @@ describe("Contracts4", () => {
                         ])
                     });
                 }
-                catch(ex) {
-                    
+                catch (ex) {
+
                 }
             });
 
             it("should not transfer the ownership", async () => {
+                console.log("hero", heroEOA);
+                console.log("villain", villianEOA);
                 const owner = await heroContract.owner();
+                console.log(owner);
                 assert.equal(owner, heroEOA);
             });
 
@@ -56,8 +61,8 @@ describe("Contracts4", () => {
                     try {
                         await heroContract.connect(signer).destroy();
                     }
-                    catch(ex) {
-                        
+                    catch (ex) {
+
                     }
                 });
 
